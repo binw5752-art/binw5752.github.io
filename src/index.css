@@ -1,0 +1,139 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-ink: #0a0a0f;
+  --color-paper: #f4ede0;
+  --color-cinnabar: #ff2d3d;
+  --color-celadon: #00e5ff;
+  --color-gold: #ffb800;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
+  font-family: "Noto Sans SC", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 全局网点背景层 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle,
+    rgba(244, 237, 224, 0.06) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+  z-index: 0;
+}
+
+/* 噪点纹理叠加 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+#root {
+  position: relative;
+  z-index: 2;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0a0f;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a38;
+  border: 2px solid #0a0a0f;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #ff2d3d;
+}
+
+::selection {
+  background: #ff2d3d;
+  color: #f4ede0;
+}
+
+/* 滚动揭示动画 */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 漫画分格边框 */
+.comic-border {
+  border: 2px solid #000;
+  outline: 2px solid #f4ede0;
+  outline-offset: 2px;
+}
+
+/* 标签下划线动画 */
+.underline-grow {
+  position: relative;
+}
+.underline-grow::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  height: 2px;
+  width: 0;
+  background: currentColor;
+  transition: width 0.3s ease-out;
+}
+.underline-grow:hover::after,
+.underline-grow.is-active::after {
+  width: 100%;
+}
+
+/* 章节阅读器滚动 */
+.reader-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #ff2d3d #1a1a24;
+}
+
+/* 闪烁光标（AI 输出） */
+.typewriter-caret::after {
+  content: "▍";
+  margin-left: 2px;
+  color: #00e5ff;
+  animation: blink-caret 1s step-end infinite;
+}

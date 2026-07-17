@@ -1,0 +1,53 @@
+# Render Blueprint: 一键部署前后端到 Render
+# 使用方法：
+#   1. 推送代码到 GitHub
+#   2. 登录 https://dashboard.render.com
+#   3. New → Blueprint → 选你的 GitHub 仓库
+#   4. Render 会自动读这个文件并创建服务
+#   5. 在 Environment 标签页填入你的真实 API Key 和 JWT_SECRET
+services:
+  - type: web
+    name: mojing
+    runtime: node
+    plan: free
+    region: singapore  # 或 oregon / frankfurt，选离你最近的
+    branch: main
+    buildCommand: npm run render-build
+    startCommand: npm run render-start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    # 持久磁盘：保存 data/db.json（注册账号、项目数据）
+    # 注意：free plan 不支持磁盘，需升级到 starter（$7/月）
+    # 如果用 free plan，每次重启数据会丢失
+    disk:
+      name: data
+      mountPath: /workspace/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        sync: false  # 部署后在控制台填入，至少 32 位随机字符串
+      - key: CORS_ORIGINS
+        sync: false  # 部署后填入你的 Render 公网域名
+      # ↓ 以下为可选的 API Key（不填则用 Mock 模式）
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: ""
+      - key: IMG_PROVIDER
+        value: ""
+      - key: DEEPSEEK_API_KEY
+        sync: false
+      - key: ZHIPU_API_KEY
+        sync: false
+      - key: QWEN_API_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: MOONSHOT_API_KEY
+        sync: false
+      - key: VOLCENGINE_API_KEY
+        sync: false
+      - key: STABILITY_API_KEY
+        sync: false
